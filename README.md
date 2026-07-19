@@ -68,3 +68,11 @@ Three isolated point-to-point networks, one cable each, no hub/switch involved: 
 | DHCP | 67 (server), 68 (client) | 7 (Application) |
 | TCP | — (carries the port field for the layer above) | 4 (Transport) |
 | UDP | — (carries the port field for the layer above) | 4 (Transport) |
+
+## Exercise 4 - Routers
+
+**Key Concepts**
+- A **Router** is responsible of connecting machines from different networks using IP addresses
+- The difference between a **Switch** and a **Router** is that switch is matching MAC adresses since it only connects local network machines. Router is matching whole network IPs to connect different networks.
+- Since it is one step further, it also sits one layer above switch. OSI layer is **3 (Network Layer)**, where IP is sitting.
+- **Default Gateway** is the IP given from each network to its connection with the router.
