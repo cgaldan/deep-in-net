@@ -76,3 +76,8 @@ Three isolated point-to-point networks, one cable each, no hub/switch involved: 
 - The difference between a **Switch** and a **Router** is that switch is matching MAC adresses since it only connects local network machines. Router is matching whole network IPs to connect different networks.
 - Since it is one step further, it also sits one layer above switch. OSI layer is **3 (Network Layer)**, where IP is sitting.
 - **Default Gateway** is the IP given from each network to its connection with the router.
+
+## Exercise 6 - Routing Table
+
+**Key Concepts**
+- A **Routing Table** is a list that every router keeps to track known destination networks.
