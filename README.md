@@ -12,7 +12,7 @@ Small Packet Tracer exercises building network fundamentals from the ground up.
 |---|---|
 | 1 (Physical) | Hub |
 | 2 (Data Link) | Switch |
-| 3 (Network) | IP |
+| 3 (Network) | IP, Router |
 | 4 (Transport) | TCP, UDP |
 | 7 (Application) | HTTP, HTTPS, FTP, DNS, DHCP |
 
@@ -81,3 +81,37 @@ Three isolated point-to-point networks, one cable each, no hub/switch involved: 
 
 **Key Concepts**
 - A **Routing Table** is a list that every router keeps to track known destination networks.
+
+## Bonus Exercise - Publishing a Private HTTPS Server with Static PAT
+
+An external PC accessed an HTTPS server in the private `192.168.1.0/24` network through the edge router's public endpoint, `203.0.113.2:443`. The ISP had no route to the private network, so the edge router used static PAT (port forwarding) to translate the public endpoint to the server at `192.168.1.2:443`.
+
+**Key concepts**
+- **NAT (Network Address Translation)** changes IP addressing as packets cross between inside and outside networks.
+- **Static PAT (Port Address Translation)** maps a specific public IP address and TCP/UDP port to a specific private service. Here, `203.0.113.2:443` mapped to `192.168.1.2:443`.
+- A **default route** provides a path for destinations that have no more-specific entry in the routing table. The edge router needed one through the ISP so server responses could return to the external client.
+
+**Edge router CLI configuration**
+
+```cisco
+ip route 0.0.0.0 0.0.0.0 203.0.113.1
+
+interface GigabitEthernet0/0
+ ip nat inside
+
+interface GigabitEthernet0/1
+ ip nat outside
+
+ip nat inside source static tcp 192.168.1.2 443 203.0.113.2 443
+```
+
+The configuration and packet translations were checked with:
+
+```cisco
+show ip route
+show ip nat translations
+show ip nat statistics
+```
+
+**Source**
+- [Cisco IOS: Using the Command-Line Interface](https://www.cisco.com/c/en/us/td/docs/ios/fundamentals/configuration/guide/12_2sr/cf_12_2sr_book/cf_cli-basics.html)
