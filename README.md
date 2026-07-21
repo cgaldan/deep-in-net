@@ -90,6 +90,8 @@ An external PC accessed an HTTPS server in the private `192.168.1.0/24` network 
 - **NAT (Network Address Translation)** changes IP addressing as packets cross between inside and outside networks.
 - **Static PAT (Port Address Translation)** maps a specific public IP address and TCP/UDP port to a specific private service. Here, `203.0.113.2:443` mapped to `192.168.1.2:443`.
 - A **default route** provides a path for destinations that have no more-specific entry in the routing table. The edge router needed one through the ISP so server responses could return to the external client.
+- An **ACL (Access Control List)** filters traffic instead of translating it. An extended ACL can match a protocol, source, destination and TCP/UDP port.
+- An ACL must be applied to an interface and direction. Here, `OUTSIDE-IN` inspected traffic entering the edge router's outside interface, permitted HTTPS on TCP port `443` and denied everything else.
 
 **Edge router CLI configuration**
 
@@ -105,12 +107,25 @@ interface GigabitEthernet0/1
 ip nat inside source static tcp 192.168.1.2 443 203.0.113.2 443
 ```
 
+**Inbound ACL configuration**
+
+```cisco
+ip access-list extended OUTSIDE-IN
+ permit tcp any host 203.0.113.2 eq 443
+ deny ip any any
+ exit
+
+interface GigabitEthernet0/1
+ ip access-group OUTSIDE-IN in
+```
+
 The configuration and packet translations were checked with:
 
 ```cisco
 show ip route
 show ip nat translations
 show ip nat statistics
+show access-lists OUTSIDE-IN
 ```
 
 **Source**
