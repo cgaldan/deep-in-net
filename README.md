@@ -12,15 +12,13 @@ Small Packet Tracer exercises building network fundamentals from the ground up.
 |---|---|
 | 1 (Physical) | Hub |
 | 2 (Data Link) | Switch |
-| 3 (Network) | IP, Router |
-| 4 (Transport) | TCP, UDP |
+| 3 (Network) | IP, Router, NAT, ACL (IP filtering) |
+| 4 (Transport) | TCP, UDP, Ports, PAT, ACL (port filtering) |
 | 7 (Application) | HTTP, HTTPS, FTP, DNS, DHCP |
 
 ---
 
 ## Exercise 1 - Direct PC-to-PC links (3 separate networks)
-
-Three isolated point-to-point networks, one cable each, no hub/switch involved: PC0-PC1, PC2-PC3, PC4-PC5.
 
 **Key concepts**
 - **RJ-45.** The 8-pin modular connector terminating each end of a twisted-pair Ethernet cable.
@@ -38,7 +36,7 @@ Three isolated point-to-point networks, one cable each, no hub/switch involved: 
 
 **Key concepts**
 - **Hub - OSI Layer 1 (Physical).** No address awareness. It regenerates the incoming electrical signal out every other port. All 5 ports share a single collision domain so any two simultaneous transmissions corrupt each other.
-- **Switch - OSI Layer 2 (Data Link).** Reads the source MAC address of each incoming frame to build a MAC address table (MAC - port). Frames to a known destination go out only that one port. Frames to an unknown destination are flooded once, then learned. Each port is effectively its own collision domain.
+- **Switch - OSI Layer 2 (Data Link).** Reads the source MAC address of each incoming frame to build a MAC address table (MAC - port). Frames from a known destination go out only that one port. It continues flooding an uknown destination until it learns that destination's location from a frame sent by that device. Each port is effectively its own collision domain.
 
 **Notes**
 - Hub host `192.168.1.5/29` → network `192.168.1.0`, broadcast `192.168.1.7`, usable `.1-.6`.
@@ -53,9 +51,9 @@ Three isolated point-to-point networks, one cable each, no hub/switch involved: 
 - **DHCP (Dynamic Host Configuration Protocol)** is a server with a specific job to track which IP address is free or already given to a device, from a fixed IP pool. When a PC has no an IP to communicate with the network, it just sends a broadcast to every connected device. Then only DCHP replies to this with an IP offering. Then the pc accepts it and the server confirms.
 - **DNS (Domain Name System)** is a server with a stored table of mappings Domain names to IPs or to other names that are connected to IPs. Straight mapping to IP is called `A` and mapping to another name that is mapping to an IP is called `CNAME`
 - **HTTP (HyperText Transfer Protocol)** is the protocol that lets browsers communicate with both servers and clients and transfer the information using requests and responses.
-- **HTTPS (HyperText Transfer Protocol Secure)** is the exact same protocol, with data encryption using a cerificate key for secured information transfer.
-- **FTP (File Trasfer Protocol)** is software that allows to securely upload, download and manage files across networks.
-- **TCP (Transmission Control Protocol)** is providing a realiable connection where data are being resent if lost in delivery no matter the time. **UDP (User Datagram Protocol)** is providing fast communication with no guarantee of consistent data trasfer, where its key priority is speed. Their difference is delivery verification and speed. While TCP is handling most of the webpages, UDP is ideal for streaming, video calling and where speed matters most.
+- **HTTPS (HyperText Transfer Protocol Secure)** is HTTP carried through **TLS (Transport Layer Security)**. A certificate helps authenticate the server, and TLS negotiates session keys that encrypt the connection.
+- **FTP (File Trasfer Protocol)** is software that allows to upload, download and manage files across networks.
+- **TCP (Transmission Control Protocol)** is providing a realiable connection where data are being resent if lost in delivery. **UDP (User Datagram Protocol)** is providing communication with no guarantee of consistent data trasfer, where its key priority is speed. Their difference is delivery verification and speed. While TCP is handling most of the webpages, UDP is ideal for streaming, video calling and where speed matters most.
 - TCP and UDP are sitting on **Layer 4 of OSI model (Transport Layer)**
 - A **Port** is part of the TCP/UDP header and it helps pointing data to the correct service on device, since a device can run many services and IP can only identify the device.
 
